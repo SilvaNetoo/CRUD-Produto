@@ -2,35 +2,34 @@ package com.mono.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.OneToOne;
 
 @Entity
-public class Produto implements Serializable {
+public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String nome;
-
-	@JsonIgnore
-	@JoinColumn(name = "carrinho_id")
-	@ManyToOne
+	private String email;
+	private String senha;
+	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
 	private Carrinho carrinho;
-
-	public Produto() {
+	
+	public Usuario() {
+		super();
 	}
 
-	public Produto(Integer id, String nome) {
+	public Usuario(Integer id, String email, String senha) {
 		this.id = id;
-		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
 	}
 
 	public Integer getId() {
@@ -41,12 +40,20 @@ public class Produto implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public Carrinho getCarrinho() {
@@ -73,7 +80,7 @@ public class Produto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produto other = (Produto) obj;
+		Usuario other = (Usuario) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -82,4 +89,9 @@ public class Produto implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", email=" + email + ", senha=" + senha + ", carrinho=" + carrinho + "]";
+	}
+	
 }

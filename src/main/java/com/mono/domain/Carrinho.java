@@ -1,36 +1,45 @@
 package com.mono.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Produto implements Serializable {
+public class Carrinho implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String nome;
-
+	
+	@OneToMany(mappedBy = "carrinho")
+	private List<Produto> produtos = new ArrayList<>();
+	
 	@JsonIgnore
-	@JoinColumn(name = "carrinho_id")
-	@ManyToOne
-	private Carrinho carrinho;
-
-	public Produto() {
+	@OneToOne
+	@JoinColumn(name = "usuario_id")
+	@MapsId
+	private Usuario usuario;
+	
+	public Carrinho() {
+		super();
 	}
 
-	public Produto(Integer id, String nome) {
+	public Carrinho(Integer id, Usuario usuario) {
+		super();
 		this.id = id;
-		this.nome = nome;
+		this.usuario = usuario;
 	}
 
 	public Integer getId() {
@@ -41,20 +50,20 @@ public class Produto implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public List<Produto> getProdutos() {
+		return produtos;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setProdutos(Produto produto) {
+		this.produtos.add(produto);
 	}
 
-	public Carrinho getCarrinho() {
-		return carrinho;
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
-	public void setCarrinho(Carrinho carrinho) {
-		this.carrinho = carrinho;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	@Override
@@ -73,13 +82,18 @@ public class Produto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produto other = (Produto) obj;
+		Carrinho other = (Carrinho) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Carrinho [id=" + id + ", produtos=" + produtos + ", usuario=" + usuario + "]";
 	}
 
 }

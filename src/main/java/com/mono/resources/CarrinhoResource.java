@@ -15,39 +15,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.mono.domain.Produto;
-import com.mono.services.ProdutoService;
+import com.mono.domain.Carrinho;
+import com.mono.services.CarrinhoService;
 
 @RestController
-@RequestMapping(value = "/produtos")
-public class ProdutoResource {
+@RequestMapping(value = "/carrinhos")
+public class CarrinhoResource {
 
 	@Autowired
-	private ProdutoService service;
+	private CarrinhoService service;
 
 	@GetMapping
 	public ResponseEntity<?> buscarTodos() {
-		List<Produto> prods = service.buscarTodos();
-		return ResponseEntity.ok().body(prods);
+		List<Carrinho> list = service.buscarTodos();
+		return ResponseEntity.ok().body(list);
 	}
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> buscar(@PathVariable Integer id) {
-		Produto prod = service.buscar(id);
-		return ResponseEntity.ok().body(prod);
+		Carrinho obj = service.buscar(id);
+		return ResponseEntity.ok().body(obj);
 	}
 
 	@PostMapping
-	public ResponseEntity<?> inserir(@RequestBody Produto prod) {
-		prod = service.inserir(prod);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(prod.getId()).toUri();
+	public ResponseEntity<?> inserir(@RequestBody Carrinho obj) {
+		obj = service.inserir(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Void> atualizar(@RequestBody Produto prod, @PathVariable Integer id) {
-		prod.setId(id);
-		prod = service.atualizar(prod);
+	public ResponseEntity<Void> atualizar(@RequestBody Carrinho obj, @PathVariable Integer id) {
+		obj.setId(id);
+		obj = service.atualizar(obj);
 		return ResponseEntity.noContent().build();
 	}
 
